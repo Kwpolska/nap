@@ -19,3 +19,6 @@
 *.out
 *.app
 *.hex
+
+# temporary
+/nap
