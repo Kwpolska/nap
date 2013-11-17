@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 // global variable is justified by logic.
 char VERSION[] = "20131117";
@@ -13,6 +15,14 @@ int print_usage(char* name) {
     return 1;
 }
 
+unsigned int convert_to_seconds(char* userinput) {
+    if (isdigit(userinput[strlen(userinput)-1]) ) {
+        return atoi(userinput);
+    } else {
+        return -1;
+    }
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 2 ||
         strcmp(argv[1], "-h") == 0 ||
@@ -24,6 +34,8 @@ int main(int argc, char* argv[]) {
         return 1;
     } else {
         printf("not implemented\nwhat did you expect?\n");
+        unsigned int t = convert_to_seconds(argv[1]);
+        printf("want %d seconds", t);
     }
 
     return 0;
