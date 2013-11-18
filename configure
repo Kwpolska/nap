@@ -1,21 +1,2 @@
-#!/bin/bash
-foundnone=1
-echo -n "checking for clang... "
-which clang > /dev/null
-if [[ $? == 0 ]]; then
-    echo "ok"
-    foundnone=0
-else
-    echo "not found"
-fi
-
-echo -n "checking for gcc... "
-which gcc > /dev/null
-if [[ $? == 0 ]]; then
-    echo "ok"
-    foundnone=0
-else
-    echo "not found"
-fi
-
-exit $foundnone
+#!/bin/sh
+true
