@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g -lm
+CFLAGS=-lm -Wall -g
 PROG=nap
 
 all:
