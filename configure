@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 foundnone=1
 echo -n "checking for clang... "
 which clang > /dev/null
