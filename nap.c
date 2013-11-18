@@ -2,40 +2,91 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <time.h>
+#include <math.h>
 
-// global variable is justified by logic.
-char VERSION[] = "20131117";
+// global variables justified by logic.
+char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
+char VERSION[64] = "20131117";
 
-int print_usage(char* name) {
-    printf("%s %s -- sleep with a progress bar\n\n", name, VERSION);
-    printf("usage: %s seconds\n", name);
-    printf("       %s time(s|m|h|d)\n", name);
-    printf("       %s (-h | --help)\n", name);
-    printf("       %s (-v | --version)\n", name);
-    return 1;
+void usage(int showname) {
+    if (showname) {
+        printf("%s %s -- sleep with a progress bar\n\n", PROGNAME, VERSION);
+    }
+    printf("usage: %s seconds\n", PROGNAME);
+    printf("       %s time(s|m|h|d)\n", PROGNAME);
+    printf("       %s (-h | --help)\n", PROGNAME);
+    printf("       %s (-v | --version)\n", PROGNAME);
 }
 
-unsigned int convert_to_seconds(char* userinput) {
-    if (isdigit(userinput[strlen(userinput)-1]) ) {
-        return atoi(userinput);
+int error(char* errortext, int showusage) {
+    printf("error: %s\n", errortext);
+    if (showusage) usage(0);
+    exit(1);
+}
+
+double evaluate_seconds(double time, char suffix) {
+    if (isdigit(suffix)) {
+        return time;
     } else {
-        return -1;
+        switch (suffix) {
+            // coreutils' idea, it’s quite useful.
+            case 's':
+                return time;
+                break;
+            case 'm':
+                return time * 60;
+                break;
+            case 'h':
+                return time * 3600;
+                break;
+            case 'd':
+                return time * 86400;
+                break;
+            default:
+                return -1;
+        }
     }
 }
 
+struct timespec input_to_timespec(char* userinput) {
+    if (userinput[0] == '-') {
+        error("not a time machine", 0);
+    }
+    char suffix = userinput[strlen(userinput) - 1];
+    double usertime = evaluate_seconds(atof(userinput), suffix);
+
+    if (usertime == -1) {
+        char* buf = NULL;
+        sprintf(buf, "suffix %c not supported (not [smhd])", suffix);
+        error(buf, 0);
+    }
+
+    time_t usersec = (time_t)floor(usertime);
+    long usernsec = (long)floor(1e9 * (usertime - usersec));
+    struct timespec sleeptime;
+    if (usernsec >= 1e9) {
+        error("nsec over or equal 1e9", 0);
+    }
+    sleeptime.tv_sec = usersec;
+    sleeptime.tv_nsec = usernsec;
+    return sleeptime;
+}
+
 int main(int argc, char* argv[]) {
+    strcpy(PROGNAME, argv[0]);
     if (argc != 2 ||
         strcmp(argv[1], "-h") == 0 ||
         strcmp(argv[1], "--help") == 0) {
-        return print_usage(argv[0]);
+        usage(1);
+        return 2;
     } else if (strcmp(argv[1], "-v") == 0 ||
                strcmp(argv[1], "--version") == 0) {
         printf("%s %s\n", argv[0], VERSION);
-        return 1;
+        return 2;
     } else {
-        printf("not implemented\nwhat did you expect?\n");
-        unsigned int t = convert_to_seconds(argv[1]);
-        printf("want %d seconds", t);
+        struct timespec tmsec = input_to_timespec(argv[1]);
+        printf("abuser wants %ld s, %ld ns=%f s\n", tmsec.tv_sec, tmsec.tv_nsec, (double)tmsec.tv_nsec / 1.e9);
     }
 
     return 0;
