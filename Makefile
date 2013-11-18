@@ -1,8 +1,10 @@
-CFLAGS=-lm -Wall -g
+CFLAGS=-Wall -g
+# <3 GCC
+POSTFLAGS=-lm
 PROG=nap
 
 all:
-	$(CC) $(CFLAGS) $(PROG).c -o $(PROG)
+	$(CC) $(CFLAGS) $(PROG).c $(POSTFLAGS) -o $(PROG)
 
 test:
 	echo "tests do not exist yet"
