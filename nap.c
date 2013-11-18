@@ -25,6 +25,41 @@ int error(char* errortext, int showusage) {
     exit(1);
 }
 
+void pbar(double value, double max) {
+    int fullwidth = 80; // TODO
+    int pbarwidth = fullwidth - 8;
+    double progress = value / max;
+
+    // calculate percentage
+    double perc = progress * 100;
+    char percs[5] = "  0%";
+    if (value == max) {
+        strcpy(percs, "100.0");
+    } else {
+        sprintf(percs, " %4.1f", perc);
+    }
+
+    // calculate things to display
+    int now = round(progress * pbarwidth);
+    char nowdraw[fullwidth];
+    memset(nowdraw, '\0', sizeof(nowdraw));
+    if (now == 0) {
+        strcpy(nowdraw, "");
+    } else if (progress == 1) {
+        memset(nowdraw, '=', now);
+    } else {
+        memset(nowdraw, '=', now - 1);
+        nowdraw[now - 1] = '>';
+    }
+
+    char padding[fullwidth];
+    memset(padding, '\0', sizeof(padding));
+    if (now != pbarwidth) {
+        memset(padding, ' ', pbarwidth - now);
+    }
+    printf("[%s%s]%s%%\n", nowdraw, padding, percs);
+}
+
 double evaluate_seconds(double time, char suffix) {
     if (isdigit(suffix)) {
         return time;
