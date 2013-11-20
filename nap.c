@@ -9,6 +9,12 @@
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
 char VERSION[64] = "20131117";
 
+struct nruns {
+    long long runs;
+    struct timespec runlength;
+    double final;
+};
+
 void usage(int showname) {
     if (showname) {
         printf("%s %s -- sleep with a progress bar\n\n", PROGNAME, VERSION);
