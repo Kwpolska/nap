@@ -65,7 +65,7 @@ double evaluate_seconds(double time, char suffix) {
         return time;
     } else {
         switch (suffix) {
-            // coreutils' idea, it’s quite useful.
+            // coreutils' idea, it's quite useful.
             case 's':
                 return time;
                 break;
@@ -93,7 +93,7 @@ struct timespec input_to_timespec(char* userinput) {
 
     if (usertime == -1) {
         char* buf = NULL;
-        sprintf(buf, "suffix %c not supported (not [smhd])", suffix);
+        sprintf(buf, "suffix %c not supported (not [smhd ])", suffix);
         error(buf, 0);
     }
 
@@ -101,7 +101,7 @@ struct timespec input_to_timespec(char* userinput) {
     long usernsec = (long)floor(1e9 * (usertime - usersec));
     struct timespec sleeptime;
     if (usernsec >= 1e9) {
-        error("nsec over or equal 1e9", 0);
+        error("nsec over or equal 1e9 -- something is wrong", 0);
     }
     sleeptime.tv_sec = usersec;
     sleeptime.tv_nsec = usernsec;
