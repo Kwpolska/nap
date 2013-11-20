@@ -31,8 +31,12 @@ int error(char* errortext, int showusage) {
     exit(1);
 }
 
+int get_termlength() {
+    return 80; // TODO
+}
+
 void pbar(double value, double max) {
-    int fullwidth = 80; // TODO
+    int fullwidth = get_termlength();
     int pbarwidth = fullwidth - 8;
     double progress = value / max;
 
