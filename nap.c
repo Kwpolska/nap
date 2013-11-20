@@ -94,6 +94,18 @@ double evaluate_seconds(double time, char suffix) {
     }
 }
 
+struct timespec sec_to_timespec(double usertime) {
+    time_t usersec = (time_t)floor(usertime);
+    long usernsec = (long)floor(1e9 * (usertime - usersec));
+    struct timespec sleeptime;
+    if (usernsec >= 1e9) {
+        error("nsec over or equal 1e9 -- something is wrong", 0);
+    }
+    sleeptime.tv_sec = usersec;
+    sleeptime.tv_nsec = usernsec;
+    return sleeptime;
+}
+
 struct timespec input_to_timespec(char* userinput) {
     if (userinput[0] == '-') {
         error("not a time machine", 0);
@@ -106,16 +118,41 @@ struct timespec input_to_timespec(char* userinput) {
         sprintf(buf, "suffix %c not supported (not [smhd ])", suffix);
         error(buf, 0);
     }
+    struct timespec out = sec_to_timespec(usertime);
+    return out;
+}
 
-    time_t usersec = (time_t)floor(usertime);
-    long usernsec = (long)floor(1e9 * (usertime - usersec));
-    struct timespec sleeptime;
-    if (usernsec >= 1e9) {
-        error("nsec over or equal 1e9 -- something is wrong", 0);
+struct nruns timespec_to_nruns(struct timespec time) {
+    struct nruns nanoruns;
+    struct timespec runlength;
+    double sec = time.tv_sec + (time.tv_nsec / 1.e9);
+    if (sec < 0.2) {
+        nanoruns.runlength = time;
+        nanoruns.runs = 1L;
+        nanoruns.final = 0.;
+    } else {
+        int pbarsize = get_termlength() - 8;
+        runlength = sec_to_timespec(sec/pbarsize);
+        double runsec = runlength.tv_sec + (runlength.tv_nsec / 1.e9);
+        if (runsec < 0.1) {
+            runlength.tv_sec = 0;
+            runlength.tv_nsec = 1e8;
+        }
+        double druns = sec/runsec;
+        long runs = floor(druns);
+        double final = druns - runs;
+        nanoruns.runlength = runlength;
+        nanoruns.runs = runs;
+        nanoruns.final = final;
     }
-    sleeptime.tv_sec = usersec;
-    sleeptime.tv_nsec = usernsec;
-    return sleeptime;
+    return nanoruns;
+}
+
+char* print_timespec(struct timespec ts) {
+    char* out = malloc(512);
+    sprintf(out, "%ld s, %ld ns=%f s", ts.tv_sec, ts.tv_nsec,
+            (double)ts.tv_nsec / 1.e9);
+    return out;
 }
 
 int main(int argc, char* argv[]) {
@@ -133,7 +170,10 @@ int main(int argc, char* argv[]) {
         // we do use timespec, but we manage them ourselves
         // (we do not pass tmsec to nanosleep or the like)
         struct timespec tmsec = input_to_timespec(argv[1]);
-        printf("abuser wants %ld s, %ld ns=%f s\n", tmsec.tv_sec, tmsec.tv_nsec, (double)tmsec.tv_nsec / 1.e9);
+        printf("abuser wants %s\n", print_timespec(tmsec));
+        struct nruns nr = timespec_to_nruns(tmsec);
+        printf("nruns: %lld runs, %s, final %f\n", nr.runs,
+               print_timespec(nr.runlength), nr.final);
     }
 
     return 0;
