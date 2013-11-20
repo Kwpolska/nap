@@ -120,6 +120,8 @@ int main(int argc, char* argv[]) {
         printf("%s %s\n", argv[0], VERSION);
         return 2;
     } else {
+        // we do use timespec, but we manage them ourselves
+        // (we do not pass tmsec to nanosleep or the like)
         struct timespec tmsec = input_to_timespec(argv[1]);
         printf("abuser wants %ld s, %ld ns=%f s\n", tmsec.tv_sec, tmsec.tv_nsec, (double)tmsec.tv_nsec / 1.e9);
     }
