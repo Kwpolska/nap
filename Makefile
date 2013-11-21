@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g
+CFLAGS=-Wall -g -DDEBUG
 # <3 GCC
 POSTFLAGS=-lm
 PROG=nap
