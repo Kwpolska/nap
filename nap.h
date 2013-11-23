@@ -147,7 +147,7 @@ struct nruns timespec_to_nruns(struct timespec time) {
 
 char* print_timespec(struct timespec ts) {
     char* out = malloc(512);
-    sprintf(out, "%ld s, %ld ns=%f s", ts.tv_sec, ts.tv_nsec,
+    sprintf(out, "%ld s, %ld ns=%f s", (long)ts.tv_sec, ts.tv_nsec,
             (double)ts.tv_nsec / 1.e9);
     return out;
 }
