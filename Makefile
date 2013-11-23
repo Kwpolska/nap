@@ -7,4 +7,5 @@ all:
 	$(CC) $(CFLAGS) $(PROG).c $(POSTFLAGS) -o $(PROG)
 
 test:
-	echo "tests do not exist yet"
+	$(CC) $(CFLAGS) test-nap.c $(POSTFLAGS) -o test-nap
+	./test-nap
