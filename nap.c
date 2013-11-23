@@ -57,7 +57,7 @@ void pbar(double value, double max) {
     if (progress == 1) {
         memset(bar, '=', now);
     } else if (0 <= progress <= 1) {
-        fprintf(stderr, "ERROR: invalid progressbar value -- !(0 =< %f =< 1)", progress);
+        fprintf(stderr, "ERROR: invalid progressbar value -- !(0 <= %f <= 1)", progress);
         exit(1);
     } else if (progress != 0) {
         memset(bar, '=', now - 1);
