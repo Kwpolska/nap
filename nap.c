@@ -54,11 +54,9 @@ void pbar(double value, double max) {
     char bar[fullwidth];
     memset(bar, '\0', sizeof(bar));
     memset(bar, ' ', pbarwidth);
-    if (now == 0) {
-        strcpy(bar, "");
-    } else if (progress == 1) {
+    if (progress == 1) {
         memset(bar, '=', now);
-    } else {
+    } else if (progress != 0) {
         memset(bar, '=', now - 1);
         bar[now - 1] = '>';
     }
