@@ -17,16 +17,16 @@ struct nruns {
 
 void usage(int showname) {
     if (showname) {
-        printf("%s %s -- sleep with a progress bar\n\n", PROGNAME, VERSION);
+        fprintf(stderr, "%s %s -- sleep with a progress bar\n\n", PROGNAME, VERSION);
     }
-    printf("usage: %s seconds\n", PROGNAME);
-    printf("       %s time(s|m|h|d)\n", PROGNAME);
-    printf("       %s (-h | --help)\n", PROGNAME);
-    printf("       %s (-v | --version)\n", PROGNAME);
+    fprintf(stderr, "usage: %s seconds\n", PROGNAME);
+    fprintf(stderr, "       %s time(s|m|h|d)\n", PROGNAME);
+    fprintf(stderr, "       %s (-h | --help)\n", PROGNAME);
+    fprintf(stderr, "       %s (-v | --version)\n", PROGNAME);
 }
 
 int error(char* errortext, int showusage) {
-    printf("error: %s\n", errortext);
+    fprintf(stderr, "error: %s\n", errortext);
     if (showusage) usage(0);
     exit(1);
 }
@@ -63,7 +63,7 @@ void pbar(double value, double max) {
         bar[now - 1] = '>';
     }
 
-    printf("[%s]%s%%\n", bar, percs);
+    fprintf(stderr, "\r[%s]%s%%", bar, percs);
 }
 
 double evaluate_seconds(double time, char suffix) {
@@ -164,7 +164,7 @@ int main(int argc, char* argv[]) {
         return 2;
     } else if (strcmp(argv[1], "-v") == 0 ||
                strcmp(argv[1], "--version") == 0) {
-        printf("%s %s\n", argv[0], VERSION);
+        fprintf(stderr, "%s %s\n", argv[0], VERSION);
         return 2;
     } else {
         // we do use timespec, but we manage them ourselves
@@ -172,13 +172,13 @@ int main(int argc, char* argv[]) {
         struct timespec tmsec = input_to_timespec(argv[1]);
         struct nruns nr = timespec_to_nruns(tmsec);
 #if defined(DEBUG) || defined(DRYMODE)
-        printf("abuser wants %s\n", print_timespec(tmsec));
-        printf("nruns: %lld runs, %s, final %f\n", nr.runs,
+        fprintf(stderr, "abuser wants %s\n", print_timespec(tmsec));
+        fprintf(stderr, "nruns: %lld runs, %s, final %f\n", nr.runs,
                print_timespec(nr.runlength), nr.final);
 #endif
 
 #ifndef DRYMODE
-        printf("not dry mode, but doesn't matter just yet\n");
+        fprintf(stderr, "not dry mode, but doesn't matter just yet\n");
         // TODO REMOVE
         do_nothingts(tmsec);
         do_nothingnr(nr);
