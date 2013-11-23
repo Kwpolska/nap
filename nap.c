@@ -51,23 +51,19 @@ void pbar(double value, double max) {
 
     // calculate things to display
     int now = round(progress * pbarwidth);
-    char nowdraw[fullwidth];
-    memset(nowdraw, '\0', sizeof(nowdraw));
+    char bar[fullwidth];
+    memset(bar, '\0', sizeof(bar));
+    memset(bar, ' ', pbarwidth);
     if (now == 0) {
-        strcpy(nowdraw, "");
+        strcpy(bar, "");
     } else if (progress == 1) {
-        memset(nowdraw, '=', now);
+        memset(bar, '=', now);
     } else {
-        memset(nowdraw, '=', now - 1);
-        nowdraw[now - 1] = '>';
+        memset(bar, '=', now - 1);
+        bar[now - 1] = '>';
     }
 
-    char padding[fullwidth];
-    memset(padding, '\0', sizeof(padding));
-    if (now != pbarwidth) {
-        memset(padding, ' ', pbarwidth - now);
-    }
-    printf("[%s%s]%s%%\n", nowdraw, padding, percs);
+    printf("[%s]%s%%\n", bar, percs);
 }
 
 double evaluate_seconds(double time, char suffix) {
