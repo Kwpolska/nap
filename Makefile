@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g -DDEBUG --std=c99 -D_POSIX_C_SOURCE=200809L
+CFLAGS=-Wall -pedantic -g -DDEBUG -std=c11 -D_POSIX_C_SOURCE=200809L
 # <3 GCC
 POSTFLAGS=-lm
 PROG=nap
