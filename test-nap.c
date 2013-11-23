@@ -3,4 +3,5 @@
 
 int main(int argc, char* argv[]) {
     fprintf(stderr, "sorry, but the tests are not ready just yet.\n");
+    return 0;
 }
