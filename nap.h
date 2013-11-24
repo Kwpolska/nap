@@ -67,6 +67,26 @@ void pbar(double value, double max) {
     fprintf(stderr, "\r[%s]%s%%", bar, percs);
 }
 
+double timemul(double time, double num) {
+    // I do this only to display an error easily without repeating myself.
+    double t = time * num;
+    // usually INT_MAX, just without a wasteful import of limits.h.
+    // Besides, I hard-coded the human representation below.
+    // 16-bit systems are not supported by design, because you could only
+    // represent 9 (signed) or 18 (unsigned) hours.  And time_t being
+    // 9 or 18 hours is illogical.
+    // On the other hand, certain systems could get this value bigger.
+    // However, nobody will use this for 68 years (68y 19d 3:14:08) thus
+    // it makes no sense to support anything bigger.
+    // Actually, I could’ve chosen a smaller arbitrary number, like
+    // a year (~31.5M).  This is a quite generous choice.
+    double MAX = 2147483647.;
+    if (time > MAX) {
+        error("value is too big (over (2^31) - 1 = 68 years)", 0);
+    }
+    return t;
+}
+
 double evaluate_seconds(double time, char suffix) {
     if (isdigit(suffix)) {
         return time;
@@ -74,16 +94,16 @@ double evaluate_seconds(double time, char suffix) {
         switch (suffix) {
             // coreutils' idea, it's quite useful.
             case 's':
-                return time;
+                return timemul(time, 1);
                 break;
             case 'm':
-                return time * 60;
+                return timemul(time, 60);
                 break;
             case 'h':
-                return time * 3600;
+                return timemul(time, 3600);
                 break;
             case 'd':
-                return time * 86400;
+                return timemul(time, 86400);
                 break;
             default:
                 return -1;
@@ -112,7 +132,7 @@ struct timespec input_to_timespec(char* userinput) {
 
     if (usertime == -1) {
         char* buf = NULL;
-        sprintf(buf, "suffix %c not supported (not [smhd ])", suffix);
+        sprintf(buf, "suffix %c not supported (not [ smhd])", suffix);
         error(buf, 0);
     }
     struct timespec out = sec_to_timespec(usertime);
