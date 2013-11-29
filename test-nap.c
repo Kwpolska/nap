@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-    fprintf(stderr, "\n---\n");
+    fprintf(stderr, "\n\n");
     fprintf(stderr, "%d passed, %d failed\n", PASSED, FAILED);
     return 0;
 }
