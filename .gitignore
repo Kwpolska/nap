@@ -40,3 +40,7 @@ Makefile.in
 
 
 /dist
+/src/nap
+/src/.deps
+/config.log
+/nap-*.tar.gz
