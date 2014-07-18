@@ -4,23 +4,25 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 // global variables justified by logic.
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
-char VERSION[16] = "20131117";
+char VERSION[16] = "20140718";
 
 struct nruns {
     long long runs;
     struct timespec runlength;
-    double final;
+    struct timespec final;
 };
 
 void usage(int showname) {
     if (showname) {
         fprintf(stderr, "%s %s -- sleep with a progress bar\n\n", PROGNAME, VERSION);
     }
-    fprintf(stderr, "usage: %s seconds\n", PROGNAME);
-    fprintf(stderr, "       %s time(s|m|h|d)\n", PROGNAME);
+    fprintf(stderr, "usage: %s SECONDS\n", PROGNAME);
+    fprintf(stderr, "       %s TIME(s|m|h|d)\n", PROGNAME);
     fprintf(stderr, "       %s (-h | --help)\n", PROGNAME);
     fprintf(stderr, "       %s (-v | --version)\n", PROGNAME);
 }
@@ -32,7 +34,9 @@ int error(char* errortext, int showusage) {
 }
 
 int get_termlength() {
-    return 80; // TODO
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return w.ws_col;
 }
 
 void pbar(double value, double max) {
@@ -143,25 +147,15 @@ struct nruns timespec_to_nruns(struct timespec time) {
     struct nruns nanoruns;
     struct timespec runlength;
     double sec = time.tv_sec + (time.tv_nsec / 1.e9);
-    if (sec < 0.2) {
-        nanoruns.runlength = time;
-        nanoruns.runs = 1L;
-        nanoruns.final = 0.;
-    } else {
         int pbarsize = get_termlength() - 8;
         runlength = sec_to_timespec(sec/pbarsize);
         double runsec = runlength.tv_sec + (runlength.tv_nsec / 1.e9);
-        if (runsec < 0.1) {
-            runlength.tv_sec = 0;
-            runlength.tv_nsec = 1e8;
-        }
         double druns = sec/runsec;
         long runs = floor(druns);
         double final = druns - runs;
         nanoruns.runlength = runlength;
         nanoruns.runs = runs;
-        nanoruns.final = final;
-    }
+        nanoruns.final = sec_to_timespec(final);
     return nanoruns;
 }
 

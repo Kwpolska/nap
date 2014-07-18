@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include "nap.h"
 
-// TODO REMOVE
-void do_nothingts(struct timespec ts) {}
-void do_nothingnr(struct nruns nr) {}
-
 int main(int argc, char* argv[]) {
+    int i = 0;
     strcpy(PROGNAME, argv[0]);
     if (argc != 2 ||
         strcmp(argv[1], "-h") == 0 ||
@@ -23,15 +20,21 @@ int main(int argc, char* argv[]) {
         struct nruns nr = timespec_to_nruns(tmsec);
 #if defined(DEBUG) || defined(DRYMODE)
         fprintf(stderr, "abuser wants %s\n", print_timespec(tmsec));
-        fprintf(stderr, "nruns: %lld runs, %s, final %f\n", nr.runs,
-               print_timespec(nr.runlength), nr.final);
+        fprintf(stderr, "nruns: %lld runs, %s, final %s\n", nr.runs,
+                print_timespec(nr.runlength), print_timespec(nr.final));
 #endif
 
 #ifndef DRYMODE
-        fprintf(stderr, "not dry mode, but doesn't matter just yet\n");
-        // TODO REMOVE
-        do_nothingts(tmsec);
-        do_nothingnr(nr);
+        pbar(0, 1);
+        for (i = 0; i < nr.runs; i++) {
+            nanosleep(&nr.runlength, &nr.runlength);
+            pbar(i, nr.runs + 1);
+        }
+        nanosleep(&nr.final, &nr.final);
+        pbar(1, 1);
+        // the progressbar disappears at the end
+        printf("\r");
+
 #endif
     }
 
