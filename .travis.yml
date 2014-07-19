@@ -9,4 +9,4 @@ script:
  - ./autogen.sh
  - ./configure
  - make
- - make install
+ - make DESTDIR='bin' install
