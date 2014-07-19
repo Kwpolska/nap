@@ -27,3 +27,10 @@
 /src/.deps
 /config.log
 /nap-*.tar.gz
+/Makefile
+/autom4te.cache
+/src/Makefile
+/config.h
+/config.log
+/config.status
+/stamp-h1
