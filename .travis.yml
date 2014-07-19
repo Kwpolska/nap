@@ -10,5 +10,5 @@ script:
  - ./configure
  - make
  - make DESTDIR='bin' install
- - $CC -o test-nap test-nap.c
+ - $CC -Wall -g -DDEBUG --std=c99 -D_POSIX_C_SOURCE=200809L test-nap.c -lm -o test-nap
  - ./test-nap
