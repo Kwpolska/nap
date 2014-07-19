@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "nap.h"
+#include "src/nap.h"
 
 int main(int argc, char* argv[]) {
     fprintf(stderr, "nap %s -- test suite\n", VERSION);

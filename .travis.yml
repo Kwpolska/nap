@@ -10,3 +10,5 @@ script:
  - ./configure
  - make
  - make DESTDIR='bin' install
+ - $CC -o test-nap test-nap.c
+ - ./test-nap
