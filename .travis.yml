@@ -2,3 +2,11 @@ language: c
 compiler:
  - clang
  - gcc
+before_install:
+ - sudo apt-get update
+ - sudo apt-get install build-essential
+script:
+ - ./autogen.sh
+ - ./configure
+ - make
+ - make install
