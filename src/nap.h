@@ -44,7 +44,7 @@
 
 // global variables justified by logic.
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
-char VERSION[16] = "20140718";
+char VERSION[16] = "0.1.1";
 
 struct nruns {
     long long runs;

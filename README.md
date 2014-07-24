@@ -8,12 +8,15 @@ Usage
 
     nap -- sleep with a progress bar
 
-    usage: nap SECONDS
-           nap TIME(s|m|h|d)
-           nap (-h | --help)
-           nap (-v | --version)
+    usage: src/nap [-s | --stay] SECONDS
+           src/nap [-s | --stay] TIME(s|m|h|d)
+           src/nap (-h | --help)
+           src/nap (-v | --version)
 
-:xa
+    If -s, --stay is specified, the progressbar stays on the screen.
+    Otherwise, it is erased after execution.
+
+LICENSE
 =======
 
 Copyright © 2013–2014, Chris “Kwpolska” Warrick.
