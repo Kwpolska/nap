@@ -255,15 +255,15 @@ OBJEXT = o
 PACKAGE = nap
 PACKAGE_BUGREPORT = chris@chriswarrick.com
 PACKAGE_NAME = nap
-PACKAGE_STRING = nap 0.1.1
+PACKAGE_STRING = nap 0.2.0
 PACKAGE_TARNAME = nap
 PACKAGE_URL = 
-PACKAGE_VERSION = 0.1.1
+PACKAGE_VERSION = 0.2.0
 PATH_SEPARATOR = :
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = 
-VERSION = 0.1.1
+VERSION = 0.2.0
 abs_builddir = /home/kwpolska/git/nap
 abs_srcdir = /home/kwpolska/git/nap
 abs_top_builddir = /home/kwpolska/git/nap
@@ -307,7 +307,7 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 SUBDIRS = src
-dist_doc_DATA = README.md CHANGELOG.md
+dist_doc_DATA = README.md CHANGELOG.md LICENSE
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

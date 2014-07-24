@@ -1,3 +1,8 @@
+v0.2.0
+======
+* Ship LICENSE
+* change to a more fitting version number, as per the SemVer spec
+
 v0.1.1
 ======
 * Added -s, --stay option to leave the progressbar on the screen after execution (Issue #2)
