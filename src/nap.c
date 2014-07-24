@@ -38,8 +38,11 @@
 
 int main(int argc, char* argv[]) {
     int i = 0;
+    char time_arg = 1;
+    char expected_argc = 2;
+    char stay_mode = 0;
     strcpy(PROGNAME, argv[0]);
-    if (argc != 2 ||
+    if (argc == 1 ||
         strcmp(argv[1], "-h") == 0 ||
         strcmp(argv[1], "--help") == 0) {
         usage(1);
@@ -48,30 +51,46 @@ int main(int argc, char* argv[]) {
                strcmp(argv[1], "--version") == 0) {
         fprintf(stderr, "%s %s\n", argv[0], VERSION);
         return 2;
-    } else {
-        // we do use timespec, but we manage them ourselves
-        // (we do not pass tmsec to nanosleep or the like)
-        struct timespec tmsec = input_to_timespec(argv[1]);
-        struct nruns nr = timespec_to_nruns(tmsec);
+    }
+
+    if (strcmp(argv[1], "-s") == 0 ||
+        strcmp(argv[1], "--stay") == 0) {
+        stay_mode = 1;
+        time_arg = 2;
+        expected_argc = 3;
+    }
+
+    if (argc != expected_argc) {
+        usage(1);
+        return 2;
+    }
+
+    // we do use timespec, but we manage them ourselves
+    // (we do not pass tmsec to nanosleep or the like)
+    struct timespec tmsec = input_to_timespec(argv[time_arg]);
+    struct nruns nr = timespec_to_nruns(tmsec);
 #if defined(DEBUG) || defined(DRYMODE)
-        fprintf(stderr, "abuser wants %s\n", print_timespec(tmsec));
-        fprintf(stderr, "nruns: %lld runs, %s, final %s\n", nr.runs,
-                print_timespec(nr.runlength), print_timespec(nr.final));
+    fprintf(stderr, "abuser wants %s\n", print_timespec(tmsec));
+    fprintf(stderr, "nruns: %lld runs, %s, final %s\n", nr.runs,
+            print_timespec(nr.runlength), print_timespec(nr.final));
 #endif
 
 #ifndef DRYMODE
-        pbar(0, 1);
-        for (i = 0; i < nr.runs; i++) {
-            nanosleep(&nr.runlength, &nr.runlength);
-            pbar(i, nr.runs + 1);
-        }
-        nanosleep(&nr.final, &nr.final);
-        pbar(1, 1);
-        // the progressbar disappears at the end
-        printf("\r");
-
-#endif
+    pbar(0, 1);
+    for (i = 0; i < nr.runs; i++) {
+        nanosleep(&nr.runlength, &nr.runlength);
+        pbar(i, nr.runs + 1);
     }
+    nanosleep(&nr.final, &nr.final);
+    pbar(1, 1);
+    if (stay_mode) {
+        // stay mode, progressbar stays on the screen
+        printf("\n");
+    } else {
+        // progressbar disappears at the end
+        erase_bar();
+    }
+#endif
 
     return 0;
 }

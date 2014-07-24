@@ -56,10 +56,12 @@ void usage(int showname) {
     if (showname) {
         fprintf(stderr, "%s %s -- sleep with a progress bar\n\n", PROGNAME, VERSION);
     }
-    fprintf(stderr, "usage: %s SECONDS\n", PROGNAME);
-    fprintf(stderr, "       %s TIME(s|m|h|d)\n", PROGNAME);
+    fprintf(stderr, "usage: %s [-s | --stay] SECONDS\n", PROGNAME);
+    fprintf(stderr, "       %s [-s | --stay] TIME(s|m|h|d)\n", PROGNAME);
     fprintf(stderr, "       %s (-h | --help)\n", PROGNAME);
     fprintf(stderr, "       %s (-v | --version)\n", PROGNAME);
+    fprintf(stderr, "\nIf -s, --stay is specified, the progressbar stays on the screen.\n");
+    fprintf(stderr, "Otherwise, it is erased after execution.\n");
 }
 
 int error(char* errortext, int showusage) {
@@ -81,7 +83,7 @@ void pbar(double value, double max) {
 
     // calculate percentage
     double perc = progress * 100;
-    char percs[5] = "  0%";
+    char percs[5] = "   0";
     if (value == max) {
         strcpy(percs, "100.0");
     } else {
@@ -104,6 +106,14 @@ void pbar(double value, double max) {
     }
 
     fprintf(stderr, "\r[%s]%s%%", bar, percs);
+}
+
+void erase_bar() {
+    int fullwidth = get_termlength();
+    char bar[fullwidth];
+    memset(bar, '\0', sizeof(bar));
+    memset(bar, ' ', fullwidth);
+    fprintf(stderr, "\r%s\r", bar);
 }
 
 double timemul(double time, double num) {
