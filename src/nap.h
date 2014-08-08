@@ -78,7 +78,7 @@ int get_termlength() {
 
 void pbar(double value, double max) {
     int fullwidth = get_termlength();
-    int pbarwidth = fullwidth - 8;
+    int pbarwidth = fullwidth - 9;
     double progress = value / max;
 
     // calculate percentage
