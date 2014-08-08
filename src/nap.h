@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 /*
- * nap
+ * nap v0.2.1
  * sleep with a progressbar
  * Copyright © 2013–2014, Chris “Kwpolska” Warrick.
  * All rights reserved.
@@ -42,9 +42,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// global variables justified by logic.
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
-char VERSION[16] = "0.1.1";
+char VERSION[16] = "0.2.1";
 
 struct nruns {
     long long runs;

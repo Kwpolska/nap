@@ -1,3 +1,7 @@
+v0.2.1
+======
+* Make the progressbar end one space before the terminal does to avoid overflow
+
 v0.2.0
 ======
 * Ship LICENSE
