@@ -43,7 +43,7 @@
  */
 
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
-char VERSION[16] = "0.2.1";
+char VERSION[16] = "0.2.2";
 
 struct nruns {
     long long runs;
@@ -83,11 +83,7 @@ void pbar(double value, double max) {
     // calculate percentage
     double perc = progress * 100;
     char percs[5] = "   0";
-    if (value == max) {
-        strcpy(percs, "100.0");
-    } else {
-        sprintf(percs, " %4.1f", perc);
-    }
+    sprintf(percs, " %4.1f", perc);
 
     // calculate things to display
     int now = round(progress * pbarwidth);

@@ -1,3 +1,7 @@
+v0.2.2
+======
+* Prevent SIGABRT when compiling with `-D_FORTIFY_SOURCE=2`
+
 v0.2.1
 ======
 * Make the progressbar end one space before the terminal does to avoid overflow
