@@ -2,7 +2,7 @@
 #include "nap.h"
 
 /*
- * nap v0.2.2
+ * nap v0.2.3
  * sleep with a progressbar
  * Copyright © 2013–2014, Chris “Kwpolska” Warrick.
  * All rights reserved.

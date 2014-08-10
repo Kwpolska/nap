@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 /*
- * nap v0.2.1
+ * nap v0.2.3
  * sleep with a progressbar
  * Copyright © 2013–2014, Chris “Kwpolska” Warrick.
  * All rights reserved.
@@ -43,7 +43,7 @@
  */
 
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
-char VERSION[16] = "0.2.2";
+char VERSION[16] = "0.2.3";
 
 struct nruns {
     long long runs;
@@ -82,7 +82,7 @@ void pbar(double value, double max) {
 
     // calculate percentage
     double perc = progress * 100;
-    char percs[5] = "   0";
+    char percs[10];
     sprintf(percs, " %4.1f", perc);
 
     // calculate things to display

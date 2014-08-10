@@ -1,4 +1,4 @@
-AC_INIT([nap], [0.2.2], [chris@chriswarrick.com])
+AC_INIT([nap], [0.2.3], [chris@chriswarrick.com])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AC_PROG_CC_C99
 AC_LANG([C])

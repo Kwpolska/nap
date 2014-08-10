@@ -1,3 +1,7 @@
+v0.2.3
+======
+* Actually fix the buffer overflow
+
 v0.2.2
 ======
 * Prevent SIGABRT when compiling with `-D_FORTIFY_SOURCE=2`
