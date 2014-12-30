@@ -1,4 +1,4 @@
-# Maintainer: Chris “Kwpolska” Warrick <chris@chriswarrick.com>
+# Maintainer: Chris Warrick <aur@chriswarrick.com>
 pkgname=nap
 _prname=nap
 pkgver=0.2.3
