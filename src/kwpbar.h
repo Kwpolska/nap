@@ -1,9 +1,14 @@
 #include <stdio.h>
-#include "nap.h"
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 /*
- * nap v0.2.4
- * sleep with a progressbar
+ * KwPBar for C, v0.1.0
  * Copyright © 2013–2015, Chris Warrick.
  * All rights reserved.
  *
@@ -36,61 +41,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-int main(int argc, char* argv[]) {
-    int i = 0;
-    char time_arg = 1;
-    char expected_argc = 2;
-    char stay_mode = 0;
-    strcpy(PROGNAME, argv[0]);
-    if (argc == 1 ||
-        strcmp(argv[1], "-h") == 0 ||
-        strcmp(argv[1], "--help") == 0) {
-        usage(1);
-        return 2;
-    } else if (strcmp(argv[1], "-v") == 0 ||
-               strcmp(argv[1], "--version") == 0) {
-        fprintf(stderr, "%s %s\n", argv[0], VERSION);
-        return 2;
+int get_termlength() {
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return w.ws_col;
+}
+
+void pbar(double value, double max) {
+    int fullwidth = get_termlength();
+    int pbarwidth = fullwidth - 9;
+    double progress = value / max;
+
+    // calculate percentage
+    double perc = progress * 100;
+    char percs[10];
+    sprintf(percs, " %4.1f", perc);
+
+    // calculate things to display
+    int now = round(progress * pbarwidth);
+    char bar[fullwidth];
+    memset(bar, '\0', sizeof(bar));
+    memset(bar, ' ', pbarwidth);
+    if (progress == 1) {
+        memset(bar, '=', now);
+    } else if (progress < 0 || progress > 1) {
+        fprintf(stderr, "ERROR: invalid progressbar value (not in range [0, 1])\n");
+        exit(1);
+    } else if (progress != 0) {
+        memset(bar, '=', now - 1);
+        bar[now - 1] = '>';
     }
 
-    if (strcmp(argv[1], "-s") == 0 ||
-        strcmp(argv[1], "--stay") == 0) {
-        stay_mode = 1;
-        time_arg = 2;
-        expected_argc = 3;
-    }
+    fprintf(stderr, "\r[%s]%s%%", bar, percs);
+}
 
-    if (argc != expected_argc) {
-        usage(1);
-        return 2;
-    }
-
-    // we do use timespec, but we manage them ourselves
-    // (we do not pass tmsec to nanosleep or the like)
-    struct timespec tmsec = input_to_timespec(argv[time_arg]);
-    struct nruns nr = timespec_to_nruns(tmsec);
-#if defined(DEBUG) || defined(DRYMODE)
-    fprintf(stderr, "abuser wants %s\n", print_timespec(tmsec));
-    fprintf(stderr, "nruns: %lld runs, %s, final %s\n", nr.runs,
-            print_timespec(nr.runlength), print_timespec(nr.final));
-#endif
-
-#ifndef DRYMODE
-    pbar(0, 1);
-    for (i = 0; i < nr.runs; i++) {
-        nanosleep(&nr.runlength, &nr.runlength);
-        pbar(i, nr.runs + 1);
-    }
-    nanosleep(&nr.final, &nr.final);
-    pbar(1, 1);
-    if (stay_mode) {
-        // stay mode, progressbar stays on the screen
-        printf("\n");
-    } else {
-        // progressbar disappears at the end
-        erase_pbar();
-    }
-#endif
-
-    return 0;
+void erase_pbar() {
+    int fullwidth = get_termlength();
+    char bar[fullwidth];
+    memset(bar, '\0', sizeof(bar));
+    memset(bar, ' ', fullwidth);
+    fprintf(stderr, "\r%s\r", bar);
 }

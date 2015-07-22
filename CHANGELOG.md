@@ -1,3 +1,7 @@
+v0.2.4
+======
+* Move progressbar code to its own reusable library
+
 v0.2.3
 ======
 * Actually fix the buffer overflow

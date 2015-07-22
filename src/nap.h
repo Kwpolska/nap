@@ -6,9 +6,10 @@
 #include <math.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include "kwpbar.h"
 
 /*
- * nap v0.2.3
+ * nap v0.2.4
  * sleep with a progressbar
  * Copyright © 2013–2015, Chris Warrick.
  * All rights reserved.
@@ -43,7 +44,7 @@
  */
 
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
-char VERSION[16] = "0.2.3";
+char VERSION[16] = "0.2.4";
 
 struct nruns {
     long long runs;
@@ -67,48 +68,6 @@ int error(char* errortext, int showusage) {
     fprintf(stderr, "error: %s\n", errortext);
     if (showusage) usage(0);
     exit(1);
-}
-
-int get_termlength() {
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    return w.ws_col;
-}
-
-void pbar(double value, double max) {
-    int fullwidth = get_termlength();
-    int pbarwidth = fullwidth - 9;
-    double progress = value / max;
-
-    // calculate percentage
-    double perc = progress * 100;
-    char percs[10];
-    sprintf(percs, " %4.1f", perc);
-
-    // calculate things to display
-    int now = round(progress * pbarwidth);
-    char bar[fullwidth];
-    memset(bar, '\0', sizeof(bar));
-    memset(bar, ' ', pbarwidth);
-    if (progress == 1) {
-        memset(bar, '=', now);
-    } else if (progress < 0 || progress > 1) {
-        fprintf(stderr, "ERROR: invalid progressbar value (not in range [0, 1])");
-        exit(1);
-    } else if (progress != 0) {
-        memset(bar, '=', now - 1);
-        bar[now - 1] = '>';
-    }
-
-    fprintf(stderr, "\r[%s]%s%%", bar, percs);
-}
-
-void erase_bar() {
-    int fullwidth = get_termlength();
-    char bar[fullwidth];
-    memset(bar, '\0', sizeof(bar));
-    memset(bar, ' ', fullwidth);
-    fprintf(stderr, "\r%s\r", bar);
 }
 
 double timemul(double time, double num) {
