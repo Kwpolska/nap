@@ -5,8 +5,10 @@ compiler:
  - gcc
 script:
  - ./autogen.sh
- - ./configure
+ - ./configure --prefix=$PWD/local
  - make
- - make DESTDIR='bin' install
+ - make install
  - $CC -Wall -g -DDEBUG --std=c99 -D_POSIX_C_SOURCE=200809L test-nap.c -lm -o test-nap
  - ./test-nap
+ - local/bin/nap --help || true
+ - local/bin/nap -s 1
