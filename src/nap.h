@@ -9,9 +9,9 @@
 #include "kwpbar.h"
 
 /*
- * nap v0.2.4
+ * nap v0.2.5
  * sleep with a progressbar
- * Copyright © 2013–2015, Chris Warrick.
+ * Copyright © 2013-2016, Chris Warrick.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@
  */
 
 char PROGNAME[64] = "nap"; // overwritten by main() with argv[0]
-char VERSION[16] = "0.2.4";
+char VERSION[16] = "0.2.5";
 
 struct nruns {
     long long runs;

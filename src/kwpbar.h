@@ -8,8 +8,8 @@
 #include <unistd.h>
 
 /*
- * KwPBar for C, v0.1.0
- * Copyright © 2013–2015, Chris Warrick.
+ * KwPBar for C, v0.2.0
+ * Copyright © 2013-2016, Chris Warrick.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,10 +47,16 @@ int get_termlength() {
     return w.ws_col;
 }
 
-void pbar(double value, double max) {
+int pbar(double value, double max) {
     int fullwidth = get_termlength();
     int pbarwidth = fullwidth - 9;
-    double progress = value / max;
+    double progress;
+    if (max == 0) {
+        fprintf(stderr, "ERROR: invalid progressbar maximum (0)\n");
+        return 1;
+    } else {
+        progress = value / max;
+    }
 
     // calculate percentage
     double perc = progress * 100;
@@ -66,13 +72,14 @@ void pbar(double value, double max) {
         memset(bar, '=', now);
     } else if (progress < 0 || progress > 1) {
         fprintf(stderr, "ERROR: invalid progressbar value (not in range [0, 1])\n");
-        exit(1);
+        return 2;
     } else if (progress != 0) {
         memset(bar, '=', now - 1);
         bar[now - 1] = '>';
     }
 
     fprintf(stderr, "\r[%s]%s%%", bar, percs);
+    return 0;
 }
 
 void erase_pbar() {

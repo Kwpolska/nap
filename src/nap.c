@@ -2,9 +2,9 @@
 #include "nap.h"
 
 /*
- * nap v0.2.4
+ * nap v0.2.5
  * sleep with a progressbar
- * Copyright © 2013–2015, Chris Warrick.
+ * Copyright © 2013-2016, Chris Warrick.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,13 +76,17 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifndef DRYMODE
-    pbar(0, 1);
+    int errno;
+    errno = pbar(0, 1);
+    if (errno != 0) return errno;
     for (i = 0; i < nr.runs; i++) {
         nanosleep(&nr.runlength, &nr.runlength);
-        pbar(i, nr.runs + 1);
+        errno = pbar(i, nr.runs + 1);
+        if (errno != 0) return errno;
     }
     nanosleep(&nr.final, &nr.final);
-    pbar(1, 1);
+    errno = pbar(1, 1);
+    if (errno != 0) return errno;
     if (stay_mode) {
         // stay mode, progressbar stays on the screen
         printf("\n");

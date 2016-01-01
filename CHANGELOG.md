@@ -1,3 +1,8 @@
+v0.2.5
+======
+* 2016
+* Update kwpbar.h
+
 v0.2.4
 ======
 * Move progressbar code to its own reusable library
