@@ -437,10 +437,10 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/kwpolska/git/nap'
+ac_pwd='/Users/kwpolska/git/nap'
 srcdir='.'
-INSTALL='/usr/bin/install -c'
-MKDIR_P='/usr/bin/mkdir -p'
+INSTALL='/usr/local/bin/ginstall -c'
+MKDIR_P='/usr/local/bin/gmkdir -p'
 AWK='gawk'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
@@ -650,15 +650,15 @@ S["am__leading_dot"]="."
 S["SET_MAKE"]=""
 S["AWK"]="gawk"
 S["mkdir_p"]="$(MKDIR_P)"
-S["MKDIR_P"]="/usr/bin/mkdir -p"
+S["MKDIR_P"]="/usr/local/bin/gmkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]=""
-S["install_sh"]="${SHELL} /home/kwpolska/git/nap/install-sh"
-S["MAKEINFO"]="${SHELL} /home/kwpolska/git/nap/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/kwpolska/git/nap/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /home/kwpolska/git/nap/missing automake-1.15"
-S["AUTOCONF"]="${SHELL} /home/kwpolska/git/nap/missing autoconf"
-S["ACLOCAL"]="${SHELL} /home/kwpolska/git/nap/missing aclocal-1.15"
+S["install_sh"]="${SHELL} /Users/kwpolska/git/nap/install-sh"
+S["MAKEINFO"]="${SHELL} /Users/kwpolska/git/nap/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /Users/kwpolska/git/nap/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /Users/kwpolska/git/nap/missing automake-1.15"
+S["AUTOCONF"]="${SHELL} /Users/kwpolska/git/nap/missing autoconf"
+S["ACLOCAL"]="${SHELL} /Users/kwpolska/git/nap/missing aclocal-1.15"
 S["VERSION"]="0.2.5"
 S["PACKAGE"]="nap"
 S["CYGPATH_W"]="echo"
@@ -671,8 +671,8 @@ S["host_alias"]=""
 S["build_alias"]=""
 S["LIBS"]=""
 S["ECHO_T"]=""
-S["ECHO_N"]="-n"
-S["ECHO_C"]=""
+S["ECHO_N"]=""
+S["ECHO_C"]="\\c"
 S["DEFS"]="-DHAVE_CONFIG_H"
 S["mandir"]="${datarootdir}/man"
 S["localedir"]="${datarootdir}/locale"
