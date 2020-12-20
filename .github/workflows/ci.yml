@@ -1,0 +1,37 @@
+name: nap CI
+on: [push, pull_request]
+
+jobs:
+  tests:
+    name: Test nap
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [clang, gcc]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Configure
+        run: |
+          ./autogen.sh
+          ./configure --prefix=$PWD/local
+        env:
+          CC: ${{ matrix.compiler }}
+      - name: Make
+        run: |
+          make
+          make install
+        env:
+          CC: ${{ matrix.compiler }}
+      - name: Build tests
+        run: |
+          $CC -Wall -g -DDEBUG --std=c99 -D_POSIX_C_SOURCE=200809L test-nap.c -lm -o test-nap
+        env:
+          CC: ${{ matrix.compiler }}
+      - name: Run tests
+        run: |
+          ./test-nap
+      - name: Run help
+        run: |
+          local/bin/nap --help || true
