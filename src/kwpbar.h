@@ -58,6 +58,11 @@ int pbar(double value, double max) {
         progress = value / max;
     }
 
+    if (progress < 0 || progress > 1) {
+        fprintf(stderr, "ERROR: invalid progressbar value (not in range [0, 1])\n");
+        return 2;
+    }
+
     // calculate percentage
     double perc = progress * 100;
     char percs[10];
@@ -65,14 +70,12 @@ int pbar(double value, double max) {
 
     // calculate things to display
     int now = round(progress * pbarwidth);
+
     char bar[fullwidth];
     memset(bar, '\0', sizeof(bar));
     memset(bar, ' ', pbarwidth);
     if (progress == 1) {
         memset(bar, '=', now);
-    } else if (progress < 0 || progress > 1) {
-        fprintf(stderr, "ERROR: invalid progressbar value (not in range [0, 1])\n");
-        return 2;
     } else if (progress != 0) {
         memset(bar, '=', now - 1);
         bar[now - 1] = '>';
